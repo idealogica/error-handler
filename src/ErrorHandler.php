@@ -3,6 +3,7 @@ namespace Idealogica\ErrorHandler;
 
 use Idealogica\ErrorHandler\Formatter\AbstractFormatter;
 use League\BooBoo\BooBoo;
+use League\BooBoo\Exception\NoFormattersRegisteredException;
 use League\BooBoo\Formatter\FormatterInterface;
 use League\BooBoo\Formatter\NullFormatter;
 use Psr\Http\Message\ServerRequestInterface;
@@ -93,7 +94,6 @@ class ErrorHandler
 
     /**
      * @return $this
-     * @throws \League\BooBoo\Exception\NoFormattersRegisteredException
      */
     public function register(): self
     {
@@ -112,7 +112,9 @@ class ErrorHandler
             }
         }
         $this->booboo->silenceAllErrors(false);
-        $this->booboo->register();
+        try {
+            $this->booboo->register();
+        } catch (NoFormattersRegisteredException $e) {}
         return $this;
     }
 
