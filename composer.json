@@ -1,0 +1,42 @@
+{
+    "name": "idealogica/error-handler",
+    "description": "Error handler based on Booboo with HTML and JSON support",
+    "keywords": ["error", "handler", "booboo", "exception", "php", "psr"],
+    "type": "library",
+    "homepage": "https://github.com/idealogica/error-handler",
+    "license": "MIT",
+    "authors":
+    [
+        {
+            "name": "Konstatin Nikiforov",
+            "email": "konstantin@idealogica.me",
+            "homepage": "http://konstantin.idealogica.me"
+        }
+    ],
+    "require":
+    {
+        "php": ">=7.1.0",
+        "ext-json": "*",
+        "league/booboo": "~2.0",
+        "psr/http-message": "~1.0",
+        "idealogica/good-view": "~1.0"
+    },
+    "require-dev":
+    {
+        "idealogica/debug": "~1.1",
+        "guzzlehttp/psr7": "~1.5"
+    },
+    "autoload":
+    {
+        "psr-4":
+        {
+            "Idealogica\\ErrorHandler\\": "src/"
+        }
+    },
+    "autoload-dev":
+    {
+        "classmap":
+        [
+        ]
+    }
+}

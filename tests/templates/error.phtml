@@ -1,0 +1,15 @@
+<?php
+use Idealogica\ErrorHandler\Formatter\HtmlFormatter;
+?>
+<html>
+    <body>
+        <h1>Error</h1>
+        <p>Message: <?= ${HtmlFormatter::VIEW_MESSAGE} ?></p>
+        <?php if (!empty(${HtmlFormatter::VIEW_MESSAGE_TYPE})): ?>
+            <p>Message type: <?= ${HtmlFormatter::VIEW_MESSAGE_TYPE} ?></p>
+        <?php endif; ?>
+        <?php if (!empty(${HtmlFormatter::VIEW_TRACE})): ?>
+            <p>Trace: <?= ${HtmlFormatter::VIEW_TRACE} ?></p>
+        <?php endif; ?>
+    </body>
+</html>
