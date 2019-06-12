@@ -56,6 +56,8 @@ class JsonFormatter extends AbstractFormatter
             $jsonData[$traceParamName] = $e->getTraceAsString();
         }
         header('Access-Control-Allow-Origin: *', true);
-        return json_encode($jsonData, JSON_PRETTY_PRINT);
+        // we don't need to show other errors in html mode so we stop here
+        echo(json_encode($jsonData, JSON_PRETTY_PRINT));
+        exit(255);
     }
 }

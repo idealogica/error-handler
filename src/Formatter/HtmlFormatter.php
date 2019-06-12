@@ -59,6 +59,8 @@ class HtmlFormatter extends AbstractFormatter
             self::VIEW_MESSAGE_TYPE => $this->debugMode ? get_class($e) : '',
             self::VIEW_TRACE => $this->debugMode ? $e->getTraceAsString() : ''
         ]);
-        return $errorView();
+        // we don't need to show other errors in json mode so we stop here
+        echo($errorView());
+        exit(255);
     }
 }
