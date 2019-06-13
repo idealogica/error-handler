@@ -37,6 +37,7 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
         $this->debugMode = $debugMode;
         $this->publicExceptionClassName = $publicExceptionClassName;
         $this->defaultErrorMessage = $defaultErrorMessage;
+        $this->setDefaultErrorLevel();
     }
 
     /**
@@ -69,6 +70,18 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
     public function setPublicExceptionClassName(string $publicExceptionClassName): AbstractFormatter
     {
         $this->publicExceptionClassName = $publicExceptionClassName;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setDefaultErrorLevel()
+    {
+        $this->setErrorLimit($this->debugMode ?
+            E_ALL :
+            E_ALL ^ E_NOTICE ^ E_USER_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED ^ E_STRICT
+        );
         return $this;
     }
 
