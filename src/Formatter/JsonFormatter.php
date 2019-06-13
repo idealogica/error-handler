@@ -23,18 +23,18 @@ class JsonFormatter extends AbstractFormatter
     /**
      * JsonFormatter constructor.
      *
-     * @param bool $debugMode
-     * @param string|null $publicExceptionClassName
-     * @param string|null $defaultErrorMessage
      * @param array $jsonStructure
+     * @param string|null $defaultErrorMessage
+     * @param string|null $publicExceptionClassName
+     * @param bool $debugMode
      */
     public function __construct(
         array $jsonStructure = [],
-        bool $debugMode = false,
+        string $defaultErrorMessage = null,
         string $publicExceptionClassName = null,
-        string $defaultErrorMessage = null
+        bool $debugMode = false
     ) {
-        parent::__construct($debugMode, $publicExceptionClassName, $defaultErrorMessage);
+        parent::__construct($defaultErrorMessage, $publicExceptionClassName, $debugMode);
         $this->jsonStructure = $jsonStructure;
     }
 

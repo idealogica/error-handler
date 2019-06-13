@@ -2,7 +2,7 @@
 namespace Idealogica\ErrorHandler\Formatter;
 
 /**
- * Class HtmlFormatter
+ * Class AbstractFormatter
  * @package Idealogica\ErrorHandler\Formatter
  */
 abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormatter
@@ -13,9 +13,9 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
     protected $errorLimit = null;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $debugMode = false;
+    protected $defaultErrorMessage;
 
     /**
      * @var string
@@ -23,21 +23,21 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
     protected $publicExceptionClassName;
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $defaultErrorMessage;
+    protected $debugMode = false;
 
     /**
-     * HtmlFormatter constructor.
+     * AbstractFormatter constructor.
      *
-     * @param bool $debugMode
-     * @param string|null $publicExceptionClassName
      * @param string|null $defaultErrorMessage
+     * @param string|null $publicExceptionClassName
+     * @param bool $debugMode
      */
     public function __construct(
-        bool $debugMode = false,
+        string $defaultErrorMessage = null,
         string $publicExceptionClassName = null,
-        string $defaultErrorMessage = null
+        bool $debugMode = false
     ) {
         $this->debugMode = $debugMode;
         $this->publicExceptionClassName = $publicExceptionClassName;

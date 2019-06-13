@@ -30,18 +30,18 @@ class HtmlFormatter extends AbstractFormatter
      *
      * @param ViewFactory $viewFactory
      * @param string $templateName
-     * @param bool $debugMode
-     * @param string|null $publicExceptionClassName
      * @param string|null $defaultErrorMessage
+     * @param string|null $publicExceptionClassName
+     * @param bool $debugMode
      */
     public function __construct(
         ViewFactory $viewFactory,
         string $templateName = 'error',
-        bool $debugMode = false,
+        string $defaultErrorMessage = null,
         string $publicExceptionClassName = null,
-        string $defaultErrorMessage = null
+        bool $debugMode = false
     ) {
-        parent::__construct($debugMode, $publicExceptionClassName, $defaultErrorMessage);
+        parent::__construct($defaultErrorMessage, $publicExceptionClassName, $debugMode);
         $this->viewFactory = $viewFactory;
         $this->templateName = $templateName;
     }
