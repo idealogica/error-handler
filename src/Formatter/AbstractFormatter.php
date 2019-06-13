@@ -8,6 +8,11 @@ namespace Idealogica\ErrorHandler\Formatter;
 abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormatter
 {
     /**
+     * @var null|int
+     */
+    protected $errorLimit = null;
+
+    /**
      * @var bool
      */
     protected $debugMode = false;
@@ -37,7 +42,6 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
         $this->debugMode = $debugMode;
         $this->publicExceptionClassName = $publicExceptionClassName;
         $this->defaultErrorMessage = $defaultErrorMessage;
-        $this->setDefaultErrorLevel();
     }
 
     /**
@@ -78,10 +82,12 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
      */
     public function setDefaultErrorLevel()
     {
-        $this->setErrorLimit($this->debugMode ?
-            E_ALL :
-            E_ALL ^ E_NOTICE ^ E_USER_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED ^ E_STRICT
-        );
+        if (!isset($this->errorLimit)) {
+            $this->setErrorLimit($this->debugMode ?
+                E_ALL :
+                E_ALL ^ E_NOTICE ^ E_USER_NOTICE ^ E_DEPRECATED ^ E_USER_DEPRECATED ^ E_STRICT
+            );
+        }
         return $this;
     }
 

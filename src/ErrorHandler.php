@@ -73,6 +73,7 @@ class ErrorHandler
                     if (isset($defaultErrorMessage)) {
                         $sapiFormatter->setDefaultErrorMessage($defaultErrorMessage);
                     }
+                    $sapiFormatter->setDefaultErrorLevel();
                 }
             }
         }
@@ -88,6 +89,7 @@ class ErrorHandler
                 if (isset($defaultErrorMessage)) {
                     $cliFormatter->setDefaultErrorMessage($defaultErrorMessage);
                 }
+                $cliFormatter->setDefaultErrorLevel();
             }
         }
     }
