@@ -19,7 +19,8 @@
         "ext-json": "*",
         "league/booboo": "~2.0",
         "psr/http-message": "~1.0",
-        "idealogica/good-view": "~1.0"
+        "idealogica/good-view": "~1.0",
+        "idealogica/log-x": "~1.1.2"
     },
     "require-dev":
     {

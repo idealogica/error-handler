@@ -2,10 +2,12 @@
 namespace Idealogica\ErrorHandler;
 
 use Idealogica\ErrorHandler\Formatter\AbstractFormatter;
+use Idealogica\LogX;
 use League\BooBoo\BooBoo;
 use League\BooBoo\Exception\NoFormattersRegisteredException;
 use League\BooBoo\Formatter\FormatterInterface;
 use League\BooBoo\Formatter\NullFormatter;
+use League\BooBoo\Handler\LogHandler;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -30,6 +32,11 @@ class ErrorHandler
     protected $cliFormatters = [];
 
     /**
+     * @var string|null
+     */
+    protected $errorLogFileName;
+
+    /**
      * @var bool
      */
     protected $sapiMode;
@@ -45,6 +52,7 @@ class ErrorHandler
      * @param ServerRequestInterface $serverRequest
      * @param array $sapiFormatterCollections
      * @param array $cliFormatters
+     * @param string|null $errorLogFileName
      * @param bool|null $debugMode
      * @param string|null $publicExceptionClassName
      * @param string|null $defaultErrorMessage
@@ -53,6 +61,7 @@ class ErrorHandler
         ServerRequestInterface $serverRequest,
         array $sapiFormatterCollections = [],
         array $cliFormatters = [],
+        string $errorLogFileName = null,
         bool $debugMode = null,
         string $publicExceptionClassName = null,
         string $defaultErrorMessage = null
@@ -60,6 +69,7 @@ class ErrorHandler
         $this->serverRequest = $serverRequest;
         $this->sapiFormatterCollections = $sapiFormatterCollections ?: [[new NullFormatter()]];
         $this->cliFormatters = $cliFormatters ?: [new NullFormatter()];
+        $this->errorLogFileName = $errorLogFileName;
         // set default values for sapi formatters
         foreach ($this->sapiFormatterCollections as $sapiFormatterCollection) {
             foreach ($sapiFormatterCollection as $sapiFormatter) {
@@ -96,6 +106,7 @@ class ErrorHandler
 
     /**
      * @return $this
+     * @throws \Exception
      */
     public function register(): self
     {
@@ -114,6 +125,9 @@ class ErrorHandler
             }
         }
         $this->booboo->silenceAllErrors(false);
+        if ($this->errorLogFileName) {
+            $this->booboo->pushHandler(new LogHandler(new LogX($this->errorLogFileName, false)));
+        }
         try {
             $this->booboo->register();
         } catch (NoFormattersRegisteredException $e) {}

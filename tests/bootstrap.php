@@ -41,7 +41,7 @@ ob_start();
  * @param callable $newCheckFunction
  * @param callable $errorFunction
  *
- * @throws \League\BooBoo\Exception\NoFormattersRegisteredException
+ * @throws Exception
  */
 function testErrorHandler(
     bool $sapiMode,
@@ -63,6 +63,7 @@ function testErrorHandler(
         [
             new CommandLineFormatter()
         ],
+        null,
         $debugMode,
         InvalidArgumentException::class
     );
