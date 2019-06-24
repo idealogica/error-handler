@@ -12,11 +12,6 @@ trait FormatterTrait
     use ErrorHandlerTrait;
 
     /**
-     * @var null|int
-     */
-    protected $errorLimit = null;
-
-    /**
      * @var string
      */
     protected $defaultErrorMessage;

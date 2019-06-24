@@ -21,6 +21,7 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
         string $publicExceptionClassName = null,
         bool $debugMode = false
     ) {
+        $this->errorLimit = null;
         $this->debugMode = $debugMode;
         $this->publicExceptionClassName = $publicExceptionClassName;
         $this->defaultErrorMessage = $defaultErrorMessage;
