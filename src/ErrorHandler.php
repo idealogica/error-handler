@@ -39,11 +39,6 @@ class ErrorHandler
     protected $handlers = [];
 
     /**
-     * @var string|null
-     */
-    protected $errorLogFileName;
-
-    /**
      * @var bool
      */
     protected $sapiMode;
@@ -60,7 +55,6 @@ class ErrorHandler
      * @param array $sapiFormatterCollections
      * @param array $cliFormatters
      * @param array $handlers
-     * @param string|null $errorLogFileName
      * @param bool|null $debugMode
      * @param string|null $publicExceptionClassName
      * @param string|null $defaultErrorMessage
@@ -70,7 +64,6 @@ class ErrorHandler
         array $sapiFormatterCollections = [],
         array $cliFormatters = [],
         array $handlers = [],
-        string $errorLogFileName = null,
         bool $debugMode = null,
         string $publicExceptionClassName = null,
         string $defaultErrorMessage = null
@@ -79,7 +72,6 @@ class ErrorHandler
         $this->sapiFormatterCollections = $sapiFormatterCollections ?: [[new NullFormatter()]];
         $this->cliFormatters = $cliFormatters ?: [new NullFormatter()];
         $this->handlers = $handlers;
-        $this->errorLogFileName = $errorLogFileName;
         // set default values for sapi formatters
         foreach ($this->sapiFormatterCollections as $sapiFormatterCollection) {
             foreach ($sapiFormatterCollection as $sapiFormatter) {
