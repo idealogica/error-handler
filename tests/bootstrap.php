@@ -83,7 +83,6 @@ function testErrorHandler(
         [
             new LogHandler(LOG_FILE_PATH)
         ],
-        null,
         $debugMode,
         InvalidArgumentException::class
     );
