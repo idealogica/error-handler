@@ -14,5 +14,6 @@ testErrorHandler(
     },
     function () {
         throw new InvalidArgumentException('!FAULT!');
-    }
+    },
+    false
 );

@@ -15,5 +15,6 @@ testErrorHandler(
     },
     function () {
         trigger_error('!WARNING!', E_USER_WARNING);
-    }
+    },
+    true
 );

@@ -14,5 +14,6 @@ testErrorHandler(
     },
     function () {
         throw new \Exception('!FAULT!');
-    }
+    },
+    true
 );

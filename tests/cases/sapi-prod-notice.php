@@ -14,5 +14,6 @@ testErrorHandler(
     },
     function () {
         trigger_error('!NOTICE!', E_USER_NOTICE);
-    }
+    },
+    false
 );

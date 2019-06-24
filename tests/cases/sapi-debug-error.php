@@ -15,5 +15,6 @@ testErrorHandler(
     },
     function () {
         trigger_error('!FATAL!', E_USER_ERROR);
-    }
+    },
+    true
 );

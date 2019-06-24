@@ -2,13 +2,15 @@
 namespace Idealogica\ErrorHandler;
 
 use Idealogica\ErrorHandler\Formatter\AbstractFormatter;
-use Idealogica\LogX;
+use Idealogica\ErrorHandler\Formatter\FormatterTrait;
+use Idealogica\ErrorHandler\Handler\AbstractHandler;
 use League\BooBoo\BooBoo;
 use League\BooBoo\Exception\NoFormattersRegisteredException;
 use League\BooBoo\Formatter\FormatterInterface;
 use League\BooBoo\Formatter\NullFormatter;
-use League\BooBoo\Handler\LogHandler;
+use League\BooBoo\Handler\HandlerInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Idealogica\ErrorHandler\Handler\HandlerTrait;
 
 /**
  * Class ErrorHandler
@@ -32,6 +34,11 @@ class ErrorHandler
     protected $cliFormatters = [];
 
     /**
+     * @var HandlerInterface[]
+     */
+    protected $handlers = [];
+
+    /**
      * @var string|null
      */
     protected $errorLogFileName;
@@ -52,6 +59,7 @@ class ErrorHandler
      * @param ServerRequestInterface $serverRequest
      * @param array $sapiFormatterCollections
      * @param array $cliFormatters
+     * @param array $handlers
      * @param string|null $errorLogFileName
      * @param bool|null $debugMode
      * @param string|null $publicExceptionClassName
@@ -61,6 +69,7 @@ class ErrorHandler
         ServerRequestInterface $serverRequest,
         array $sapiFormatterCollections = [],
         array $cliFormatters = [],
+        array $handlers = [],
         string $errorLogFileName = null,
         bool $debugMode = null,
         string $publicExceptionClassName = null,
@@ -69,11 +78,14 @@ class ErrorHandler
         $this->serverRequest = $serverRequest;
         $this->sapiFormatterCollections = $sapiFormatterCollections ?: [[new NullFormatter()]];
         $this->cliFormatters = $cliFormatters ?: [new NullFormatter()];
+        $this->handlers = $handlers;
         $this->errorLogFileName = $errorLogFileName;
         // set default values for sapi formatters
         foreach ($this->sapiFormatterCollections as $sapiFormatterCollection) {
             foreach ($sapiFormatterCollection as $sapiFormatter) {
-                if ($sapiFormatter instanceof AbstractFormatter) {
+                if ($sapiFormatter instanceof AbstractFormatter ||
+                    in_array(FormatterTrait::class, class_uses($sapiFormatter))
+                ) {
                     if (isset($debugMode)) {
                         $sapiFormatter->setDebugMode($debugMode);
                     }
@@ -89,7 +101,9 @@ class ErrorHandler
         }
         // set default values for cli formatters
         foreach ($this->cliFormatters as $cliFormatter) {
-            if ($cliFormatter instanceof AbstractFormatter) {
+            if ($cliFormatter instanceof AbstractFormatter ||
+                in_array(FormatterTrait::class, class_uses($cliFormatter))
+            ) {
                 if (isset($debugMode)) {
                     $cliFormatter->setDebugMode($debugMode);
                 }
@@ -102,6 +116,20 @@ class ErrorHandler
                 $cliFormatter->setDefaultErrorLevel();
             }
         }
+        // set default values for handlers
+        foreach ($this->handlers as $handler) {
+            if ($handler instanceof AbstractHandler ||
+                in_array(HandlerTrait::class, class_uses($handler))
+            ) {
+                if (isset($debugMode)) {
+                    $handler->setDebugMode($debugMode);
+                }
+                if (isset($publicExceptionClassName)) {
+                    $handler->setPublicExceptionClassName($publicExceptionClassName);
+                }
+                $handler->setDefaultErrorLevel();
+            }
+        }
     }
 
     /**
@@ -111,23 +139,23 @@ class ErrorHandler
     public function register(): self
     {
         if (isset($this->sapiMode) ? !$this->sapiMode : (php_sapi_name() === "cli")) {
-            $this->booboo = new BooBoo($this->cliFormatters);
+            $this->booboo = new BooBoo($this->cliFormatters, $this->handlers);
         } else {
             $requestUriPath = $this->serverRequest->getUri()->getPath();
             foreach ($this->sapiFormatterCollections as $regexp => $formatters) {
                 if ($regexp && is_string($regexp) && preg_match('#' . $regexp . '#i', $requestUriPath)) {
-                    $this->booboo = new BooBoo($formatters);
+                    $this->booboo = new BooBoo($formatters, $this->handlers);
                     break;
                 }
             }
             if (!$this->booboo) {
-                $this->booboo = new BooBoo(array_shift($this->sapiFormatterCollections));
+                $this->booboo = new BooBoo(
+                    array_shift($this->sapiFormatterCollections),
+                    $this->handlers
+                );
             }
         }
         $this->booboo->silenceAllErrors(false);
-        if ($this->errorLogFileName) {
-            $this->booboo->pushHandler(new LogHandler(new LogX($this->errorLogFileName, false)));
-        }
         try {
             $this->booboo->register();
         } catch (NoFormattersRegisteredException $e) {}
