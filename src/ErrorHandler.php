@@ -126,7 +126,6 @@ class ErrorHandler
 
     /**
      * @return $this
-     * @throws \Exception
      */
     public function register(): self
     {
