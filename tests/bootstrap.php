@@ -84,7 +84,7 @@ function testErrorHandler(
             new LogHandler(LOG_FILE_PATH)
         ],
         $debugMode,
-        InvalidArgumentException::class
+        [InvalidArgumentException::class]
     );
     $handler->setSapiMode($sapiMode)->register();
     $testName = $newTestName;

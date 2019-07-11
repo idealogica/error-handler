@@ -56,7 +56,7 @@ class ErrorHandler
      * @param array $cliFormatters
      * @param array $handlers
      * @param bool|null $debugMode
-     * @param string|null $publicExceptionClassName
+     * @param string[] $publicExceptionClassNames
      * @param string|null $defaultErrorMessage
      */
     public function __construct(
@@ -65,7 +65,7 @@ class ErrorHandler
         array $cliFormatters = [],
         array $handlers = [],
         bool $debugMode = null,
-        string $publicExceptionClassName = null,
+        array $publicExceptionClassNames = [],
         string $defaultErrorMessage = null
     ) {
         $this->serverRequest = $serverRequest;
@@ -81,8 +81,8 @@ class ErrorHandler
                     if (isset($debugMode)) {
                         $sapiFormatter->setDebugMode($debugMode);
                     }
-                    if (isset($publicExceptionClassName)) {
-                        $sapiFormatter->setPublicExceptionClassName($publicExceptionClassName);
+                    if ($publicExceptionClassNames) {
+                        $sapiFormatter->setPublicExceptionClassNames($publicExceptionClassNames);
                     }
                     if (isset($defaultErrorMessage)) {
                         $sapiFormatter->setDefaultErrorMessage($defaultErrorMessage);
@@ -99,8 +99,8 @@ class ErrorHandler
                 if (isset($debugMode)) {
                     $cliFormatter->setDebugMode($debugMode);
                 }
-                if (isset($publicExceptionClassName)) {
-                    $cliFormatter->setPublicExceptionClassName($publicExceptionClassName);
+                if ($publicExceptionClassNames) {
+                    $cliFormatter->setPublicExceptionClassNames($publicExceptionClassNames);
                 }
                 if (isset($defaultErrorMessage)) {
                     $cliFormatter->setDefaultErrorMessage($defaultErrorMessage);
@@ -116,8 +116,8 @@ class ErrorHandler
                 if (isset($debugMode)) {
                     $handler->setDebugMode($debugMode);
                 }
-                if (isset($publicExceptionClassName)) {
-                    $handler->setPublicExceptionClassName($publicExceptionClassName);
+                if ($publicExceptionClassNames) {
+                    $handler->setPublicExceptionClassNames($publicExceptionClassNames);
                 }
                 $handler->setDefaultErrorLevel();
             }

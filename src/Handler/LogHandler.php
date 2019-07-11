@@ -15,18 +15,18 @@ class LogHandler extends \League\BooBoo\Handler\LogHandler
      * LogHandler constructor.
      *
      * @param string $logFilePath
-     * @param string|null $publicExceptionClassName
+     * @param string[] $publicExceptionClassNames
      * @param bool $debugMode
      *
      * @throws \Exception
      */
     public function __construct(
         string $logFilePath,
-        string $publicExceptionClassName = null,
+        array $publicExceptionClassNames = [],
         bool $debugMode = false
     ) {
         parent::__construct(new LogX($logFilePath, false));
-        $this->publicExceptionClassName = $publicExceptionClassName;
+        $this->publicExceptionClassNames = $publicExceptionClassNames;
         $this->debugMode = $debugMode;
     }
 
@@ -35,7 +35,7 @@ class LogHandler extends \League\BooBoo\Handler\LogHandler
      */
     public function handle($e)
     {
-        if ($this->publicExceptionClassName && $e instanceof $this->publicExceptionClassName) {
+        if ($this->publicExceptionClassNames && in_array(get_class($e), $this->publicExceptionClassNames)) {
             return;
         }
         parent::handle($e);

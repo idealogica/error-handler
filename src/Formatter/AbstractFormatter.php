@@ -13,17 +13,17 @@ abstract class AbstractFormatter extends \League\BooBoo\Formatter\AbstractFormat
      * AbstractFormatter constructor.
      *
      * @param string|null $defaultErrorMessage
-     * @param string|null $publicExceptionClassName
+     * @param string[] $publicExceptionClassNames
      * @param bool $debugMode
      */
     public function __construct(
         string $defaultErrorMessage = null,
-        string $publicExceptionClassName = null,
+        array $publicExceptionClassNames = [],
         bool $debugMode = false
     ) {
         $this->errorLimit = null;
         $this->debugMode = $debugMode;
-        $this->publicExceptionClassName = $publicExceptionClassName;
+        $this->publicExceptionClassNames = $publicExceptionClassNames;
         $this->defaultErrorMessage = $defaultErrorMessage;
     }
 }

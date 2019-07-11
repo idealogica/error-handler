@@ -34,7 +34,7 @@ trait FormatterTrait
      */
     protected function extractMessage(\Throwable $e): string
     {
-        return $this->publicExceptionClassName && !$e instanceof $this->publicExceptionClassName && !$this->debugMode ?
+        return $this->publicExceptionClassNames && !in_array(get_class($e), $this->publicExceptionClassNames) && !$this->debugMode ?
             ($this->defaultErrorMessage ?: 'A critical error occurred. Please contact support') :
             $e->getMessage();
     }

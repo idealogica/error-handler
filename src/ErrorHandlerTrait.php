@@ -8,9 +8,9 @@ namespace Idealogica\ErrorHandler;
 trait ErrorHandlerTrait
 {
     /**
-     * @var string
+     * @var string[]
      */
-    protected $publicExceptionClassName;
+    protected $publicExceptionClassNames;
 
     /**
      * @var bool
@@ -18,13 +18,13 @@ trait ErrorHandlerTrait
     protected $debugMode;
 
     /**
-     * @param string $publicExceptionClassName
+     * @param string[] $publicExceptionClassNames
      *
      * @return $this
      */
-    public function setPublicExceptionClassName(string $publicExceptionClassName): self
+    public function setPublicExceptionClassNames(array $publicExceptionClassNames): self
     {
-        $this->publicExceptionClassName = $publicExceptionClassName;
+        $this->publicExceptionClassNames = $publicExceptionClassNames;
         return $this;
     }
 
