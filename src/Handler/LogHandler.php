@@ -35,7 +35,9 @@ class LogHandler extends \League\BooBoo\Handler\LogHandler
      */
     public function handle($e)
     {
-        if ($this->publicExceptionClassNames && in_array(get_class($e), $this->publicExceptionClassNames)) {
+        $classes = [get_class($e)];
+        $classes = array_merge($classes, array_values((array)class_parents($e)));
+        if ($this->publicExceptionClassNames && array_intersect($classes, $this->publicExceptionClassNames)) {
             return;
         }
         parent::handle($e);
