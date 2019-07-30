@@ -34,7 +34,9 @@ trait FormatterTrait
      */
     protected function extractMessage(\Throwable $e): string
     {
-        return $this->publicExceptionClassNames && !in_array(get_class($e), $this->publicExceptionClassNames) && !$this->debugMode ?
+        $classes = [get_class($e)];
+        $classes = array_merge($classes, array_values((array)class_parents($e)));
+        return $this->publicExceptionClassNames && !array_intersect($classes, $this->publicExceptionClassNames) && !$this->debugMode ?
             ($this->defaultErrorMessage ?: 'A critical error occurred. Please contact support') :
             $e->getMessage();
     }
