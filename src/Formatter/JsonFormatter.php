@@ -40,12 +40,14 @@ class JsonFormatter extends AbstractFormatter
 
     /**
      * @param \Throwable $e
+     * @param string $template
+     * @param bool $sendErrorOutput
      *
      * @return \Psr\Http\Message\StreamInterface|string
      */
-    public function format($e)
+    public function format($e, string $template = '', bool $sendErrorOutput = true)
     {
-        $message = $this->extractMessage($e);
+        $message = $this->extractMessage($e, $template);
         $statusParamName = $this->jsonStructure[self::JSON_STATUS] ?? 'status';
         $resultParamName = $this->jsonStructure[self::JSON_RESULT] ?? 'result';
         $messageTypeParamName = $this->jsonStructure[self::JSON_MESSAGE_TYPE] ?? 'messageType';
@@ -57,7 +59,11 @@ class JsonFormatter extends AbstractFormatter
         }
         header('Access-Control-Allow-Origin: *', true);
         // we don't need to show other errors in html mode so we stop here
-        echo(json_encode($jsonData, JSON_PRETTY_PRINT));
-        exit(255);
+        if ($sendErrorOutput) {
+            echo(json_encode($jsonData, JSON_PRETTY_PRINT));
+            exit(255);
+        } else {
+            return json_encode($jsonData, JSON_PRETTY_PRINT);
+        }
     }
 }

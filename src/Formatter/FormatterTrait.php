@@ -29,15 +29,17 @@ trait FormatterTrait
 
     /**
      * @param \Throwable $e
+     * @param string $template
      *
      * @return string
      */
-    protected function extractMessage(\Throwable $e): string
+    protected function extractMessage(\Throwable $e, string $template = ''): string
     {
         $classes = [get_class($e)];
         $classes = array_merge($classes, array_values((array)class_parents($e)));
-        return $this->publicExceptionClassNames && !array_intersect($classes, $this->publicExceptionClassNames) && !$this->debugMode ?
+        $message = $this->publicExceptionClassNames && !array_intersect($classes, $this->publicExceptionClassNames) && !$this->debugMode ?
             ($this->defaultErrorMessage ?: 'A critical error occurred. Please contact support') :
             $e->getMessage();
+        return $template ? sprintf($template, $message) : $message;
     }
 }

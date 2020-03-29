@@ -48,19 +48,24 @@ class HtmlFormatter extends AbstractFormatter
 
     /**
      * @param \Throwable $e
+     * @param string $template
+     * @param bool $sendErrorOutput
      *
      * @return \Psr\Http\Message\StreamInterface|string
      */
-    public function format($e)
+    public function format($e, string $template = '', bool $sendErrorOutput = true)
     {
-        $message = $this->extractMessage($e);
+        $message = $this->extractMessage($e, $template);
         $errorView = $this->viewFactory->create($this->templateName, [
             self::VIEW_MESSAGE => strip_tags($message, '<a><p>'),
             self::VIEW_MESSAGE_TYPE => $this->debugMode ? get_class($e) : '',
-            self::VIEW_TRACE => $this->debugMode ? $e->getTraceAsString() : ''
+            self::VIEW_TRACE => $this->debugMode ? $e->getTraceAsString() : '',
         ]);
         // we don't need to show other errors in json mode so we stop here
-        echo($errorView());
-        exit(255);
+        if ($sendErrorOutput) {
+            echo($errorView());
+            exit(255);
+        }
+        return $errorView();
     }
 }
