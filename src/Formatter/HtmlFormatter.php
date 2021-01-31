@@ -9,6 +9,8 @@ use Idealogica\GoodView\ViewFactory;
  */
 class HtmlFormatter extends AbstractFormatter
 {
+    const VIEW_EXCEPTION = 'exception';
+
     const VIEW_MESSAGE = 'message';
 
     const VIEW_MESSAGE_TYPE = 'messageType';
@@ -57,6 +59,7 @@ class HtmlFormatter extends AbstractFormatter
     {
         $message = $this->extractMessage($e, $template);
         $errorView = $this->viewFactory->create($this->templateName, [
+            self::VIEW_EXCEPTION => $e,
             self::VIEW_MESSAGE => strip_tags($message, '<a><p>'),
             self::VIEW_MESSAGE_TYPE => $this->debugMode ? get_class($e) : '',
             self::VIEW_TRACE => $this->debugMode ? $e->getTraceAsString() : '',
