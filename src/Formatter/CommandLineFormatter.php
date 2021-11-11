@@ -10,4 +10,15 @@ use League\BooBoo\Formatter\CommandLineFormatter as BooBooCommandLineFormatter;
 class CommandLineFormatter extends BooBooCommandLineFormatter
 {
     use FormatterTrait;
+
+    /**
+     * @param \Exception $e
+     *
+     * @return void
+     */
+    public function format($e)
+    {
+        echo (parent::format($e));
+        exit (255);
+    }
 }
